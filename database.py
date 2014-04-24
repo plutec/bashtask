@@ -4,6 +4,9 @@ import os
 
 class Database(object):
     def __init__(self):
+        """
+        Constructor, create a connection
+        """
         self.conn = sqlite3.connect(os.path.join(
                                         os.path.dirname(__file__), 'db.db'))
     def load_next(self):
@@ -70,16 +73,3 @@ class Database(object):
         Close the database connection
         """
         self.conn.close()
-
-
-
-
-
-
-
-
-
-
-
-
-

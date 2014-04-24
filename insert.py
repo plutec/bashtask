@@ -10,13 +10,8 @@ def main():
     parser.add_argument('-p', dest='priority', type=int, default=1,#action='store_const',
                        help='priority to the command. Default: 1 (More priority)')
 
-
-
-
     args = parser.parse_args()
-
     database.Database().insert_task(args.command[0], args.priority)
-
 
 if __name__ == '__main__':
     main()
