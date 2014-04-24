@@ -15,7 +15,7 @@ def main():
 
     args = parser.parse_args()
 
-    database.insert_task(args.command[0], args.priority)
+    database.Database().insert_task(args.command[0], args.priority)
 
 
 if __name__ == '__main__':

@@ -5,10 +5,14 @@ import time
 import subprocess
 
 def insert(command, priority=None):
+    """
+    We can use this method to insert a command in the queue without 
+        use the terminal, for example, importing bashtask and using the method.
+    """
     if not priority:
         priority = 1
 
-    database.insert_task(command, priority)
+    database.Database().insert_task(command, priority)
 
 
 def main():    
@@ -38,22 +42,23 @@ def main():
 
 
 def run():
+    db = database.Database()
     while(True):
-        task = database.load_next()
+        task = db.load_next()
         if task:            
             print "Executing %s" % task.command
             try:
                 output = subprocess.Popen(task.command.split(), 
                         stdout = subprocess.PIPE).communicate()[0]
                 print "Finished %s" % task.command
-                database.update_task(task_id=task.id, 
-                                     executed=True, 
-                                     correct=True)
+                db.update_task(task_id=task.id, 
+                               executed=True, 
+                               correct=True)
             except Exception, why:
                 print "Error executing %s" % task.command
-                database.update_task(task_id=task.id, 
-                                     executed=True, 
-                                     correct=False)
+                db.update_task(task_id=task.id, 
+                               executed=True, 
+                               correct=False)
 
         else:
             time.sleep(0.5)
