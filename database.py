@@ -1,19 +1,19 @@
 import sqlite3
 import task
+import os
 
-def clean_db(name):
-    conn = sqlite3.connect(name)
+
+def clean_db():
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
     
-    c.execute('''DELETE FROM task WHERE 1=1;''')
+    c.execute('DELETE FROM task')
     conn.commit()
     conn.close()
 
-def delete_db(name):
-    pass
 
-def create_db(name):
-    conn = sqlite3.connect(name)
+def create_db():
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
 
     c.execute('''CREATE TABLE task
@@ -27,9 +27,9 @@ def create_db(name):
     conn.commit()
     conn.close()
 
-def load_next(dbname):
+def load_next():
     to_ret = list()
-    conn = sqlite3.connect(dbname)
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
     c.execute("SELECT * FROM task WHERE load=0 ORDER BY priority ASC LIMIT 1")
     task_obj = None
@@ -42,8 +42,9 @@ def load_next(dbname):
     conn.close()
     return task_obj
 
-def update_task(dbname, task_id, executed, correct):
-    conn = sqlite3.connect('db.db')
+def update_task(task_id, executed, correct):
+
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
 
     c.execute('''UPDATE task
@@ -57,7 +58,7 @@ def update_task(dbname, task_id, executed, correct):
 
 def read_db(name):
     to_ret = list()
-    conn = sqlite3.connect(name)
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
     c.execute("SELECT * FROM task WHERE load=0")
     for row in c.fetchall():
@@ -70,14 +71,12 @@ def read_db(name):
     conn.close()
     return to_ret
 
-def insert_task(dbname, command, priority):
-    conn = sqlite3.connect('db.db')
+def insert_task(command, priority):
+    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'db.db'))
     c = conn.cursor()
-
     c.execute('''INSERT INTO task
                 (date, command, priority, executed, correct, load)
                     VALUES
                 (0, '%s', %d, 0, 1, 0);''' % (command, priority))
-
     conn.commit()
     conn.close()
