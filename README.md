@@ -1,0 +1,4 @@
+bashtask
+========
+
+Slow tasks manager
