@@ -31,10 +31,10 @@ def main():
     if args.create_db:
         print "Removing old database..."
         print "Creating empty database..."
-        database.create_db()
+        database.Database().create_db()
     if args.clean_db:
         print "Cleaning database..."
-        database.clean_db()
+        database.Database().clean_db()
     if not args.not_run:
         print "Running bashtask daemon..."
         run()

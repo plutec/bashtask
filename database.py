@@ -1,6 +1,7 @@
 import sqlite3
 import task
 import os
+import datetime
 
 class Database(object):
     def __init__(self):
@@ -24,12 +25,21 @@ class Database(object):
         #conn.close()
         return task_obj
 
+    @staticmethod
+    def get_datetime_now_str():
+        now = datetime.datetime.now()
+        date_str = now.strftime('%d/%m/%y-%H:%M:%S')
+        print date_str
+        return date_str
+
     def insert_task(self, command, priority):
         c = self.conn.cursor()
+        date_str = self.get_datetime_now_str()
         c.execute('''INSERT INTO task
-                    (date, command, priority, executed, correct, load)
+                    (insert_date, command, priority, executed, correct, load)
                         VALUES
-                    (0, '%s', %d, 0, 1, 0);''' % (command, priority))
+                    ('%s', '%s', %d, 0, 1, 0);''' % 
+                                                (date_str, command, priority))
         self.conn.commit()
 
     def clean_db(self):
@@ -48,7 +58,7 @@ class Database(object):
 
         c.execute('''CREATE TABLE task
                      (id INTEGER primary key AUTOINCREMENT,
-                      date TEXT, 
+                      insert_date TEXT, 
                       command TEXT,
                       priority INTEGER, 
                       executed INTEGER,
@@ -60,10 +70,9 @@ class Database(object):
         c = self.conn.cursor()
 
         c.execute('''UPDATE task
-                        SET 
-                    executed=%d, correct=%d
-                        WHERE
-                    id=%d;''' % (executed, correct, task_id))
+                     SET executed=%d, correct=%d
+                     WHERE
+                     id=%d;''' % (executed, correct, task_id))
 
         self.conn.commit()
         
