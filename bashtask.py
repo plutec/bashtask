@@ -2,7 +2,7 @@ import argparse
 import task
 import database
 import time
-import subprocess
+
 
 def insert(command, priority=None):
     """
@@ -42,26 +42,28 @@ def main():
 
 
 def run():
+    #Preparing variables
     db = database.Database()
     while(True):
         task = db.load_next()
         if task:            
             print "Executing %s" % task.command
             try:
-                output = subprocess.Popen(task.command.split(), 
-                        stdout = subprocess.PIPE).communicate()[0]
+                output = task.start()
                 print "Finished %s" % task.command
                 db.update_task(task_id=task.id, 
                                executed=True, 
                                correct=True)
             except Exception, why:
                 print "Error executing %s" % task.command
+                print why
                 db.update_task(task_id=task.id, 
                                executed=True, 
                                correct=False)
 
         else:
             time.sleep(0.5)
+
         
 
 if __name__ == '__main__':

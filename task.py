@@ -8,8 +8,8 @@ class Task(object):
     priority = None
     executed = None
     correct = None
+
     def __init__(self, command, priority=None):
-        
         if not priority:
             priority = 1
 
@@ -19,6 +19,7 @@ class Task(object):
         self.executed = False
         self.correct = False
 
-    def execute(self):
-        output = subprocess.Popen(['nslookup', self.dominio], 
-                stdout = subprocess.PIPE).communicate()[0]
+    def start(self):
+        output = subprocess.Popen(self.command.split(), 
+            stdout = subprocess.PIPE).communicate()[0]
+        return output
