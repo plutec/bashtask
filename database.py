@@ -29,7 +29,6 @@ class Database(object):
     def get_datetime_now_str():
         now = datetime.datetime.now()
         date_str = now.strftime('%d/%m/%y-%H:%M:%S')
-        print date_str
         return date_str
 
     def insert_task(self, command, priority):
