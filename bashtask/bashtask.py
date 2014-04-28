@@ -50,7 +50,8 @@ def run():
             print "Executing %s" % task.command
             try:
                 output = task.start()
-                print "Finished %s" % task.command
+                print "[%d] Finished %s" % (task.id, task.command)
+                print "[%d] Result %s" % (task.id, output)
                 db.update_task(task_id=task.id, 
                                executed=True, 
                                correct=True)

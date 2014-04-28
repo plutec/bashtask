@@ -80,4 +80,7 @@ class Database(object):
         """
         Close the database connection
         """
-        self.conn.close()
+	try:
+	    self.conn.close()
+	except:
+	    pass
